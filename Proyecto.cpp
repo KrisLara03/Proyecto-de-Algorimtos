@@ -66,24 +66,20 @@ public:
 
     void mostrarVagones() const {
         for (const auto& vagon : vagones) {
-            cout << "Vagón: " << vagon.getNombre() << endl;
+            cout << "Vagon: " << vagon.getNombre() << endl;
             vagon.mostrarAmenidades();
             vagon.mostrarPasajeros();
             cout << endl;
         }
     }
-
-    // Otros métodos de gestión del tren
 };
 
 int main() {
     Tren tren;
 
-    // Ejemplo de uso
     tren.agregarVagon("Vagon 1");
     tren.agregarVagon("Vagon 2");
 
-    // Agregar amenidades y pasajeros a los vagones
     tren.mostrarVagones();
 
     return 0;
