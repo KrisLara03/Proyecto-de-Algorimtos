@@ -10,11 +10,42 @@ struct Pasajero {
     int asiento;
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Estructura para representar una amenidad
 struct Amenidad {
     string nombre;
     int cantidad;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Definición de la estructura de un vagón
 struct Vagon {
