@@ -16,6 +16,69 @@ struct Amenidad {
     int cantidad;
 };
 
+// Definición de la estructura de un vagón
+struct Vagon {
+    string nombre;
+    Vagon* siguiente;
+    Vagon* anterior;
+};
+
+// Función para agregar un nuevo vagon a la lista
+void agregarVagon(Vagon*& primero, Vagon*& ultimo, string nombre) {
+    Vagon* nuevoVagon = new Vagon;
+    nuevoVagon->nombre = nombre;
+    nuevoVagon->siguiente = nullptr;
+    nuevoVagon->anterior = nullptr;
+
+    if (primero == nullptr) {
+        primero = ultimo = nuevoVagon;
+    } else {
+        ultimo->siguiente = nuevoVagon;
+        nuevoVagon->anterior = ultimo;
+        ultimo = nuevoVagon;
+    }
+}
+
+// Función para eliminar el último vagon de la lista
+void eliminarUltimoVagon(Vagon*& primero, Vagon*& ultimo) {
+    if (ultimo != nullptr) {
+        if (ultimo == primero) {
+            delete ultimo;
+            primero = ultimo = nullptr;
+        } else {
+            Vagon* temp = ultimo;
+            ultimo = ultimo->anterior;
+            ultimo->siguiente = nullptr;
+            delete temp;
+        }
+    }
+}
+
+// Función para mostrar todos los vagones en la lista
+void mostrarVagones(Vagon* primero) {
+    cout << "Lista de Vagones:" << endl;
+    Vagon* actual = primero;
+    while (actual != nullptr) {
+        cout << "- " << actual->nombre << endl;
+        actual = actual->siguiente;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 // Clase para representar un vagón
 class Vagon {
 private:
@@ -73,7 +136,7 @@ public:
         }
     }
 };
-
+*/
 int main() {
     Tren tren;
 
