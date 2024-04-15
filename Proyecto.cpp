@@ -14,6 +14,7 @@ struct Pasajero {
 struct Amenidad {
     string nombre;
     int cantidad;
+    Amenidad* siguiente;
 };
 
 // Definicion de la estructura de un vagon
@@ -21,7 +22,7 @@ struct Vagon {
     string nombre;
     Vagon* siguiente;
     Vagon* anterior;
-    list<Amenidad> amenidades;
+    Amenidad* primeraAmenidad;
     list<Pasajero> pasajeros;
 };
 
@@ -42,7 +43,7 @@ void agregarVagon(Tren& tren, string nombre) {
     nuevoVagon->nombre = nombre;
     nuevoVagon->siguiente = nullptr;
     nuevoVagon->anterior = nullptr;
-    nuevoVagon->amenidades = list<Amenidad>();
+    nuevoVagon->primeraAmenidad = nullptr;
     nuevoVagon->pasajeros = list<Pasajero>();
 
     if (tren.primero == nullptr) {
@@ -81,19 +82,32 @@ void mostrarVagones(const Tren& tren) {
     cout << endl;
 }
 
+// Funcion para modificar un vagon
+void modificarVagon(Vagon* vagon, string nuevoNombre) {
+    vagon->nombre = nuevoNombre;
+}
+
 // Funcion para agregar una amenidad a un vagon
 void agregarAmenidad(Vagon* vagon, string nombre, int cantidad) {
-    Amenidad nuevaAmenidad;
-    nuevaAmenidad.nombre = nombre;
-    nuevaAmenidad.cantidad = cantidad;
-    vagon->amenidades.push_back(nuevaAmenidad);
+    Amenidad* nuevaAmenidad = new Amenidad;
+    nuevaAmenidad->nombre = nombre;
+    nuevaAmenidad->cantidad = cantidad;
+
+    if (vagon->primeraAmenidad == nullptr) {
+        vagon->primeraAmenidad = nuevaAmenidad;
+    } else {
+        nuevaAmenidad->siguiente = vagon->primeraAmenidad;
+        vagon->primeraAmenidad = nuevaAmenidad;
+    }
 }
 
 // Funcion para mostrar las amenidades de un vagon
 void mostrarAmenidades(const Vagon& vagon) {
     cout << "Amenidades en el vagon " << vagon.nombre << ":" << endl;
-    for (const auto& amenidad : vagon.amenidades) {
-        cout << "- " << amenidad.nombre << ": " << amenidad.cantidad << endl;
+    Amenidad* actual = vagon.primeraAmenidad;
+    while (actual != nullptr) {
+        cout << "- " << actual->nombre << ": " << actual->cantidad << endl;
+        actual = actual->siguiente;
     }
     cout << endl;
 }
@@ -161,7 +175,6 @@ int main() {
                 cout << "Ingrese la cantidad de la amenidad: ";
                 cin >> cantidadAmenidad;
                 // Buscar el vagon por nombre y agregar la amenidad
-                // Por simplicidad, se asume que el vagon existe
                 agregarAmenidad(tren.primero, nombreAmenidad, cantidadAmenidad);
                 cout << "Amenidad agregada correctamente al vagon." << endl;
                 break;
@@ -196,6 +209,14 @@ int main() {
                 break;
             default:
                 cout << "Opcion no valida\n";
+                break;
+            case 9:
+                cout << "Ingrese el nombre del vagon que desea modificar: ";
+                cin >> nombreVagon;
+                cout << "Ingrese el nuevo nombre para el vagon: ";
+                cin >> nuevoNombre;
+                modificarVagon(tren.primero, nuevoNombre);
+                cout << "Nombre del vagon modificado correctamente." << endl;
                 break;
         }
     } while (opcion != 8);
