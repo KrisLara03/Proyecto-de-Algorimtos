@@ -26,6 +26,8 @@ struct Vagon {
     Amenidad* primerAmenidad;
     Vagon* siguiente;
     Vagon* anterior;
+    // Constructor para inicializar primerAmenidad a nullptr
+    Vagon() : primerAmenidad(nullptr), siguiente(nullptr), anterior(nullptr) {}
 };
 
 // Función para agregar un nuevo vagon a la lista
@@ -81,7 +83,7 @@ bool hayVagones(Vagon* primero) {
 void agregarPasajero(Vagon* vagon) {
     Pasajero nuevoPasajero;
     cout << "Ingrese el nombre del pasajero: " << endl;
-    getline(cin, nuevoPasajero.nombre);
+    cin >> nuevoPasajero.nombre;
     cout << "Ingrese el numero de asiento del pasajero: "<< endl;
     cin >> nuevoPasajero.asiento;
 
@@ -104,7 +106,7 @@ void mostrarPasajeros(Vagon* vagon) {
 
 //Agregar amenidad
 // Función para agregar una amenidad a un vagón
-//Agregar amenidad
+
 void agregarAmenidad(Vagon* vagon) {
     Amenidad* nuevaAmenidad = new Amenidad; // Crear una nueva amenidad
     cout << "Ingrese el nombre de la amenidad: ";
@@ -166,7 +168,6 @@ void eliminarAmenidad(Vagon* vagon, const string& nombreAmenidad) {
 }
 
 
-
 //Funciones para modificar información de los vagones, amenidades y pasajeros
 
 //Modificar vagones
@@ -214,27 +215,32 @@ void modificarAmenidad(Vagon* vagon, const string& nombreAmenidad, const string&
 //Consultas
 
 //Amenidades
-void listarAmenidades(Vagon* primero) {
-    // Si no hay vagones en la lista del tren, informar al usuario y salir
-    if (primero == nullptr) {
-        cout << "No hay vagones en la lista del tren." << endl;
-        return;
+// Función para mostrar todas las amenidades disponibles en el vagón actual
+void mostrarAmenidades(Vagon* vagonActual) {
+    // Verificar si el vagón actual tiene amenidades
+    if (vagonActual->primerAmenidad == nullptr) {
+        cout << "No hay amenidades en el vagon actual." << endl;
+        return; // Regresar sin hacer nada más
     }
 
-    cout << "Amenidades disponibles en el tren:" << endl;
-    Vagon* actual = primero;
+    cout << "Amenidades disponibles en el vagon " << vagonActual->nombre << ":" << endl;
+
+    // Recorrer todas las amenidades del vagón actual
+    Amenidad* amenidadActual = vagonActual->primerAmenidad;
     do {
-        // Si el vagón actual tiene amenidades, mostrarlas
-        if (actual->primerAmenidad != nullptr) {
-            Amenidad* amenidadActual = actual->primerAmenidad;
-            do {
-                cout << "- " << amenidadActual->nombre << endl;
-                amenidadActual = amenidadActual->siguiente;
-            } while (amenidadActual != actual->primerAmenidad);
-        }
-        actual = actual->siguiente;
-    } while (actual != primero);
+        cout << "- " << amenidadActual->nombre << ": " << amenidadActual->cantidad << endl;
+        amenidadActual = amenidadActual->siguiente;
+    } while (amenidadActual != vagonActual->primerAmenidad);
+
+    // Solicitar al usuario que presione Enter para continuar
+    cout << "Presione Enter para volver al menu de administracion...";
+    cin.ignore(); // Limpiar el buffer de entrada
+    while (cin.get() != '\n') {} // Esperar a que el usuario presione Enter
+    return;
 }
+
+
+
 
 //Total pasajeros
 int contarTotalPasajeros(Vagon* primero) {
@@ -352,24 +358,35 @@ void mostrarMenuAdministracion(Vagon*& vagonActual) {
                 break;
             }
             case 6: {
+        
                 if (vagonActual) {
-                    string nombreAmenidad;
+                    string nombreAmenidad, nuevoNombre;
+                    int nuevaCantidad;
                     cout << "Ingrese el nombre de la amenidad a modificar: ";
                     cin >> nombreAmenidad;
-                    modificarAmenidad(vagonActual, nombreAmenidad);
+                    cout << "Ingrese el nuevo nombre para la amenidad: ";
+                    cin >> nuevoNombre;
+                    cout << "Ingrese la nueva cantidad para la amenidad: ";
+                    cin >> nuevaCantidad;
+                    modificarAmenidad(vagonActual, nombreAmenidad, nuevoNombre, nuevaCantidad);
                 } else {
                     cout << "No hay un vagon actual para modificar amenidades." << endl;
                 }
                 break;
             }
              case 7: {
+                
                 if (vagonActual) {
-                    listarAmenidades(vagonActual);
+                cout << "Mostrando amenidades del vagon actual..." << endl;
+                mostrarAmenidades(vagonActual);
+                continue;
                 } else {
-                    cout << "No hay un vagon actual para mostrar amenidades." << endl;
+                cout << "No hay un vagon actual para mostrar amenidades." << endl;
                 }
+                cout << "Presiona Enter para volver al Menu de Administracion..." << endl;
                 break;
             }
+        
             case 8: {
                 if (vagonActual) {
                     string nombreAmenidad;
@@ -421,7 +438,7 @@ void mostrarMenuReportes(Vagon*& vagonActual) {
 
         switch (opcion) {
             case 1: {
-                listarAmenidades(vagonActual);
+                mostrarAmenidades(vagonActual);
                 break;
             }
             case 2: {
