@@ -81,8 +81,6 @@ bool hayVagones(Vagon* primero) {
 void agregarPasajero(Vagon* vagon) {
     Pasajero nuevoPasajero;
     cout << "Ingrese el nombre del pasajero: " << endl;
-    getline(cin, nuevoPasajero.nombre);
-    cout << "Ingrese el numero de asiento del pasajero: "<< endl;
     cin >> nuevoPasajero.asiento;
 
     vagon->pasajeros.push_back(nuevoPasajero);
@@ -103,7 +101,7 @@ void mostrarPasajeros(Vagon* vagon) {
 // Gestion de amenidades
 
 //Agregar amenidad
-// Función para agregar una amenidad a un vagón
+//Función para agregar una amenidad a un vagón
 //Agregar amenidad
 void agregarAmenidad(Vagon* vagon) {
     Amenidad* nuevaAmenidad = new Amenidad; // Crear una nueva amenidad
@@ -421,9 +419,42 @@ void mostrarMenuReportes(Vagon*& vagonActual) {
 
         switch (opcion) {
             case 1: {
-                listarAmenidades(vagonActual);
+    listarAmenidades(primerVagon); // Listar todas las amenidades disponibles en el tren
+    cout << "Seleccione una amenidad para obtener el total en todos los vagones: ";
+    string nombreAmenidad;
+    cin >> nombreAmenidad;
+
+    int totalAmenidad = 0;
+    Vagon* actual = primerVagon;
+    do {
+        Amenidad* amenidadActual = actual->primerAmenidad;
+        while (amenidadActual != nullptr) {
+            if (amenidadActual->nombre == nombreAmenidad) {
+                totalAmenidad += amenidadActual->cantidad;
+            }
+            amenidadActual = amenidadActual->siguiente;
+        }
+        actual = actual->siguiente;
+    } while (actual != primerVagon);
+
+    cout << "Calculando total de " << nombreAmenidad << " en todos los vagones..." << endl;
+    cout << "Reporte de " << nombreAmenidad << ":" << endl;
+    actual = primerVagon;
+    do {
+        Amenidad* amenidadActual = actual->primerAmenidad;
+        while (amenidadActual != nullptr) {
+            if (amenidadActual->nombre == nombreAmenidad) {
+                cout << "Vagon " << actual->nombre << ": " << amenidadActual->cantidad << " " << nombreAmenidad << endl;
+            }
+              amenidadActual = amenidadActual->siguiente;
+            }
+              actual = actual->siguiente;
+    } while (actual != primerVagon);
+
+                cout << "Total de " << nombreAmenidad << " en el Tren: " << totalAmenidad << endl;
                 break;
             }
+
             case 2: {
                 cout << "Numero total de pasajeros: " << contarTotalPasajeros(vagonActual) << endl;
                 break;
