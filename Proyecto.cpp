@@ -1,3 +1,6 @@
+// Krisbel Lara, David Hoyos, Ashly Anchia
+//Proyecto Algoritmos
+
 #include <iostream>
 #include <list>
 #include <string>
@@ -167,9 +170,49 @@ void eliminarAmenidad(Vagon* vagon, const string& nombreAmenidad) {
     cout << "Amenidad eliminada con exito." << endl;
 }
 
-// Función para mostrar todas las amenidades disponibles en el tren
+
+// Función para contar la cantidad de una amenidad en un vagon específico
+// Función para mostrar el menú de selección de amenidades
+string mostrarSubMenuAmenidades(set<string>& amenidadesTotales) {
+    int opcion;
+    cout << "Seleccione una amenidad:\n";
+    int i = 1;
+    for (const string& amenidad : amenidadesTotales) {
+        cout << i << ". " << amenidad << endl;
+        i++;
+    }
+    cin >> opcion;
+    auto it = amenidadesTotales.begin();
+    advance(it, opcion - 1);
+    return *it;
+}
+
+// Función para contar la cantidad de una amenidad en un vagon específico
+int contarCantidadAmenidadEnVagon(Vagon* vagon, const string& amenidadSeleccionada) {
+    int cantidadTotal = 0;
+    Amenidad* actualAmenidad = vagon->primerAmenidad;
+    while (actualAmenidad != nullptr) {
+        if (actualAmenidad->nombre == amenidadSeleccionada) {
+            cantidadTotal++;
+        }
+        actualAmenidad = actualAmenidad->siguiente;
+    }
+    return cantidadTotal;
+}
+
+// Función para mostrar la cantidad de una amenidad en cada vagon del tren
+void mostrarCantidadAmenidadPorVagon(Vagon* primero, const string& amenidadSeleccionada) {
+    Vagon* actual = primero;
+    while (actual != nullptr) {
+        int cantidadEnVagon = contarCantidadAmenidadEnVagon(actual, amenidadSeleccionada);
+        cout << "Cantidad de '" << amenidadSeleccionada << "' en el vagon '" << actual->nombre << "': " << cantidadEnVagon << endl;
+        actual = actual->siguiente;
+    }
+}
+
+// Función para mostrar las amenidades disponibles en el tren y permitir al usuario seleccionar una para ver su cantidad en cada vagon
 void mostrarAmenidadesTren(Vagon* primero) {
-    set<string> amenidadesTotales; // Conjunto para almacenar las amenidades unicas
+    set<string> amenidadesTotales; // Conjunto para almacenar las amenidades únicas
 
     Vagon* actual = primero;
     while (actual != nullptr) {
@@ -181,14 +224,14 @@ void mostrarAmenidadesTren(Vagon* primero) {
         actual = actual->siguiente;
     }
 
-    cout << "Amenidades disponibles en el tren:" << endl;
-    for (const string& amenidad : amenidadesTotales) {
-        cout << "- " << amenidad << endl;
-    }
+    string amenidadSeleccionada = mostrarSubMenuAmenidades(amenidadesTotales);
+
+    mostrarCantidadAmenidadPorVagon(primero, amenidadSeleccionada);
 }
 
-//Funciones para modificar información de los vagones, amenidades y pasajeros
 
+
+//Funciones para modificar información de los vagones, amenidades y pasajeros
 //Modificar vagones
 void modificarNombreVagon(Vagon* vagon, const string& nuevoNombre) {
     if (vagon != nullptr) {
@@ -297,16 +340,17 @@ void distribucionPasajerosPorVagon(Vagon* primero) {
     } else {
         cout << "Reporte de distribucion de pasajeros:\n";
         do {
-            int numPasajeros = actual->pasajeros.size(); // Obtenemos la cantidad de pasajeros en el vagón actual
+            int numPasajeros = actual->pasajeros.size(); // Obtener la cantidad de pasajeros en el vagón actual
             cout << "Vagon " << actual->nombre << ": " << numPasajeros << " pasajeros\n";
-            totalPasajeros += numPasajeros; 
-            actual = actual->anterior;
-        } while (actual != nullptr && actual != primero); 
+            totalPasajeros += numPasajeros; // Sumar la cantidad de pasajeros al total
+            actual = actual->siguiente;
+        } while (actual != nullptr && actual != primero); // Continuar hasta que se recorra toda la lista de vagones
 
-        // Mostramos el total de pasajeros en el tren
+        // Mostrar el total de pasajeros en el tren
         cout << "Total de pasajeros en el Tren: " << totalPasajeros << "\n";
     }
 }
+
 
 // Función para mostrar el menú de administración de información
 void mostrarMenuAdministracion(Vagon*& vagonActual) {
@@ -527,4 +571,3 @@ int main() {
 
     return 0;
 }
-
