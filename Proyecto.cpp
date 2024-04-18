@@ -297,17 +297,16 @@ void distribucionPasajerosPorVagon(Vagon* primero) {
     } else {
         cout << "Reporte de distribucion de pasajeros:\n";
         do {
-            int numPasajeros = actual->pasajeros.size(); // Obtener la cantidad de pasajeros en el vagón actual
+            int numPasajeros = actual->pasajeros.size(); // Obtenemos la cantidad de pasajeros en el vagón actual
             cout << "Vagon " << actual->nombre << ": " << numPasajeros << " pasajeros\n";
-            totalPasajeros += numPasajeros; // Sumar la cantidad de pasajeros al total
-            actual = actual->siguiente;
-        } while (actual != nullptr && actual != primero); // Continuar hasta que se recorra toda la lista de vagones
+            totalPasajeros += numPasajeros; 
+            actual = actual->anterior;
+        } while (actual != nullptr && actual != primero); 
 
-        // Mostrar el total de pasajeros en el tren
+        // Mostramos el total de pasajeros en el tren
         cout << "Total de pasajeros en el Tren: " << totalPasajeros << "\n";
     }
 }
-
 
 // Función para mostrar el menú de administración de información
 void mostrarMenuAdministracion(Vagon*& vagonActual) {
