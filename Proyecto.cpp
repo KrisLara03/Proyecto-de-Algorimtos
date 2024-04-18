@@ -235,7 +235,7 @@ void modificarAmenidad(Vagon* vagon, const string& nombreAmenidad, const string&
 
 //Amenidades
 // Función para mostrar todas las amenidades disponibles en el vagón actual
-void mostrarAmenidades(Vagon* vagonActual) {
+void mostrarAmenidades(Vagon* vagonActual ) {
     // Verificar si el vagón actual tiene amenidades
     if (vagonActual->primerAmenidad == nullptr) {
         cout << "No hay amenidades en el vagon actual." << endl;
@@ -245,14 +245,15 @@ void mostrarAmenidades(Vagon* vagonActual) {
     cout << "Amenidades disponibles en el vagon " << vagonActual->nombre << ":" << endl;
 
     // Recorrer todas las amenidades del vagón actual
-    Amenidad* amenidadActual = vagonActual->primerAmenidad;
+    Amenidad* amenidadtemp = vagonActual->primerAmenidad;
+    Amenidad* primerAmenidad = vagonActual->primerAmenidad;
 
     do {
-        cout << "- " << amenidadActual->nombre << ": " << amenidadActual->cantidad << endl;
-        amenidadActual = amenidadActual->siguiente;
-    } while (amenidadActual != vagonActual->primerAmenidad);
+        cout << "- " << amenidadtemp->nombre << ": " << amenidadtemp->cantidad << endl;
+        amenidadtemp = amenidadtemp->siguiente;
+    } while (amenidadtemp != nullptr && amenidadtemp != primerAmenidad);
 
-    cout << "hola";
+    cout << " ... " << endl;
 }
 
 
@@ -296,13 +297,13 @@ void distribucionPasajerosPorVagon(Vagon* primero) {
     } else {
         cout << "Reporte de distribucion de pasajeros:\n";
         do {
-            int numPasajeros = actual->pasajeros.size(); // Obtenemos la cantidad de pasajeros en el vagón actual
+            int numPasajeros = actual->pasajeros.size(); // Obtener la cantidad de pasajeros en el vagón actual
             cout << "Vagon " << actual->nombre << ": " << numPasajeros << " pasajeros\n";
-            totalPasajeros += numPasajeros; // Sumamos al total de pasajeros
+            totalPasajeros += numPasajeros; // Sumar la cantidad de pasajeros al total
             actual = actual->siguiente;
-        } while (actual != primero); 
+        } while (actual != nullptr && actual != primero); // Continuar hasta que se recorra toda la lista de vagones
 
-        // Mostramos el total de pasajeros en el tren
+        // Mostrar el total de pasajeros en el tren
         cout << "Total de pasajeros en el Tren: " << totalPasajeros << "\n";
     }
 }
@@ -488,6 +489,7 @@ void mostrarMenuIngreso(Vagon*& vagonActual) {
         cout << "0. Salir" << endl;
         cout << "Seleccione una opcion: ";
         cin >> opcion;
+        cout << endl;
 
         switch (opcion) {
             case 1: {
